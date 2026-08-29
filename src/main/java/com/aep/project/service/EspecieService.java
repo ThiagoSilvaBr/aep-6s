@@ -1,5 +1,6 @@
 package com.aep.project.service;
 
+import com.aep.project.exception.EspecieNotFoundException;
 import com.aep.project.model.Especie;
 import com.aep.project.repository.EspecieRepository;
 import org.springframework.stereotype.Service;
@@ -30,12 +31,11 @@ public class EspecieService {
 
     public Especie buscarPorId(String id) {
         return especieRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Espécie não encontrada"));
+                .orElseThrow(() -> new EspecieNotFoundException("Espécie não encontrada com o ID: " + id));
     }
 
     public Especie atualizar(String id, Especie especieAtualizada) {
-        Especie especie = especieRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Espécie não encontrada"));
+        Especie especie = buscarPorId(id);
 
         especie.setNomePopular(especieAtualizada.getNomePopular());
         especie.setNomeCientifico(especieAtualizada.getNomeCientifico());
@@ -47,11 +47,8 @@ public class EspecieService {
         return especieRepository.save(especie);
     }
 
-    public void deletar(String id) {
-        if(!especieRepository.existsById(id)) {
-            throw new RuntimeException("Espécie não encontrada");
-        }
-
+    public void deletar(String id){
+        buscarPorId(id);
         especieRepository.deleteById(id);
     }
 }
