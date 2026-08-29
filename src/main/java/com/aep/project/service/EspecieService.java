@@ -19,12 +19,13 @@ public class EspecieService {
         return especieRepository.save(especie);
     }
 
-    public List<Especie> buscarTodas() {
-        return especieRepository.findAll();
-    }
+    public List<Especie> buscar(String nomePopular) {
 
-    public List<Especie> buscarPorNomePopular(String nomePopular) {
-        return especieRepository.findByNomePopularContainingIgnoreCase(nomePopular);
+        if(nomePopular != null && !nomePopular.isBlank()) {
+            return especieRepository.findByNomePopularContainingIgnoreCase(nomePopular);
+        }
+
+        return especieRepository.findAll();
     }
 
     public Especie buscarPorId(String id) {
