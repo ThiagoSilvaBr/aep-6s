@@ -23,6 +23,10 @@ public class EspecieService {
         return especieRepository.findAll();
     }
 
+    public List<Especie> buscarPorNomePopular(String nomePopular) {
+        return especieRepository.findByNomePopularContainingIgnoreCase(nomePopular);
+    }
+
     public Especie buscarPorId(String id) {
         return especieRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Espécie não encontrada"));
