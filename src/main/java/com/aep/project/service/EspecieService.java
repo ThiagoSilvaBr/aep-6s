@@ -31,7 +31,7 @@ public class EspecieService {
 
     public Especie buscarPorId(String id) {
         return especieRepository.findById(id)
-                .orElseThrow(() -> new EspecieNotFoundException("Espécie não econtrado com o ID: " + id));
+                .orElseThrow(() -> new EspecieNotFoundException("Espécie não encontrada com o ID: " + id));
     }
 
     public Especie atualizar(String id, Especie especieAtualizada) {
