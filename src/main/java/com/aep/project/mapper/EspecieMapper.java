@@ -6,7 +6,7 @@ import com.aep.project.model.Especie;
 
 public class EspecieMapper {
 
-    public static Especie mapeandoParaEntidade(EspecieRequest especieRequest){
+    public static Especie paraEntidade(EspecieRequest especieRequest){
         Especie especie = new Especie();
 
         especie.setNomePopular(especieRequest.nomePopular());
@@ -19,7 +19,7 @@ public class EspecieMapper {
         return especie;
     }
 
-    public static EspecieResponse mapeandoParaResposta(Especie especie){
+    public static EspecieResponse paraResposta(Especie especie){
 
         return new EspecieResponse(
                 especie.getId(),
