@@ -1,5 +1,8 @@
 package com.aep.project.controller;
 
+import com.aep.project.dto.EspecieRequest;
+import com.aep.project.dto.EspecieResponse;
+import com.aep.project.mapper.EspecieMapper;
 import com.aep.project.model.Especie;
 import com.aep.project.service.EspecieService;
 import jakarta.validation.Valid;
@@ -21,16 +24,18 @@ public class EspecieController {
     }
 
     @PostMapping
-    public ResponseEntity<Especie> criar(@Valid @RequestBody Especie especie) {
-        Especie request = especieService.criar(especie);
+    public ResponseEntity<EspecieResponse> criar(@Valid @RequestBody EspecieRequest especieRequest) {
+        Especie request = EspecieMapper.mapeandoParaEntidade(especieRequest);
+        Especie especie = especieService.criar(request);
+        EspecieResponse especieResponse = EspecieMapper.mapeandoParaResposta(especie);
 
         URI uri = ServletUriComponentsBuilder
                 .fromCurrentRequestUri()
                 .path("/{id}")
-                .buildAndExpand(request.getId())
+                .buildAndExpand(especie.getId())
                 .toUri();
 
-        return ResponseEntity.created(uri).body(request);
+        return ResponseEntity.created(uri).body(especieResponse);
     }
 
     @GetMapping
