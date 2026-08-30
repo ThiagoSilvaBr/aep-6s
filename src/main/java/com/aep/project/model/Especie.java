@@ -1,10 +1,6 @@
 package com.aep.project.model;
 
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "especies")
@@ -13,23 +9,11 @@ public class Especie {
     @Id
     private String id;
 
-    @NotBlank
     private String nomePopular;
-
-    @NotBlank
     private String nomeCientifico;
-
-    @NotNull
     private Grupo grupo;
-
-    @NotNull
     private Bioma bioma;
-
-    @NotNull
     private NivelRisco nivelRisco;
-
-    @NotNull
-    @Min(0)
     private Integer populacaoEstimada;
 
     public Especie() {}

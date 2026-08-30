@@ -25,9 +25,11 @@ public class EspecieController {
 
     @PostMapping
     public ResponseEntity<EspecieResponse> criar(@Valid @RequestBody EspecieRequest especieRequest) {
-        Especie request = EspecieMapper.mapeandoParaEntidade(especieRequest);
-        Especie especie = especieService.criar(request);
-        EspecieResponse especieResponse = EspecieMapper.mapeandoParaResposta(especie);
+
+        Especie especie = EspecieMapper.paraEntidade(especieRequest);
+        especie = especieService.criar(especie);
+
+        EspecieResponse especieResponse = EspecieMapper.paraResposta(especie);
 
         URI uri = ServletUriComponentsBuilder
                 .fromCurrentRequestUri()
@@ -39,22 +41,37 @@ public class EspecieController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Especie>> buscar(@RequestParam(required = false) String nomePopular) {
-        return ResponseEntity.ok(especieService.buscar(nomePopular));
+    public ResponseEntity<List<EspecieResponse>> buscar(
+            @RequestParam(required = false) String nomePopular) {
+
+        List<EspecieResponse> especies = especieService.buscar(nomePopular)
+                .stream()
+                .map(EspecieMapper::paraResposta)
+                .toList();
+
+        return ResponseEntity.ok(especies);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Especie> buscarPorId(@PathVariable String id) {
-        return ResponseEntity.ok(especieService.buscarPorId(id));
+    public ResponseEntity<EspecieResponse> buscarPorId(@PathVariable String id) {
+
+        Especie especie = especieService.buscarPorId(id);
+
+        return ResponseEntity.ok(EspecieMapper.paraResposta(especie));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Especie> atualizar(@PathVariable String id, @Valid @RequestBody Especie novaEspecie) {
-        return ResponseEntity.ok(especieService.atualizar(id, novaEspecie));
+    public ResponseEntity<EspecieResponse> atualizar(@PathVariable String id,
+                                                     @Valid @RequestBody EspecieRequest especieRequest) {
+
+        Especie especie = EspecieMapper.paraEntidade(especieRequest);
+        especie = especieService.atualizar(id, especie);
+
+        return ResponseEntity.ok(EspecieMapper.paraResposta(especie));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deletar(@PathVariable String id) {
+    public ResponseEntity<Void> deletar(@PathVariable String id) {
         especieService.deletar(id);
         return ResponseEntity.noContent().build();
     }
