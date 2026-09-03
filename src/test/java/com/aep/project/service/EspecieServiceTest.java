@@ -19,8 +19,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class EspecieServiceTest {
@@ -115,6 +114,45 @@ public class EspecieServiceTest {
 
         assertThrows(EspecieNotFoundException.class,() -> especieService.buscarPorId("100"));
         verify(especieRepository).findById("100");
+    }
+
+    @Test
+    @DisplayName("Deve atualizar uma espécie por id")
+    public void deveAtualizarUmaEspéciePorId() {
+        especie.setId("1");
+
+        Especie especieAtualizada = new Especie();
+        especieAtualizada.setNomePopular("Arara-Azul");
+        especieAtualizada.setNomeCientifico("Anodorhynchus hyacinthinus");
+        especieAtualizada.setGrupo(Grupo.AVE);
+        especieAtualizada.setBioma(Bioma.CERRADO);
+        especieAtualizada.setNivelRisco(NivelRisco.ALTO);
+        especieAtualizada.setPopulacaoEstimada(500);
+
+        when(especieRepository.findById("1")).thenReturn(Optional.of(especie));
+        when(especieRepository.save(especie)).thenReturn(especie);
+
+        Especie resultado = especieService.atualizar("1", especieAtualizada);
+
+        assertEquals("Arara-Azul", resultado.getNomePopular());
+        assertEquals("Anodorhynchus hyacinthinus", resultado.getNomeCientifico());
+        assertEquals(Bioma.CERRADO, resultado.getBioma());
+        assertEquals(NivelRisco.ALTO, resultado.getNivelRisco());
+        assertEquals(500, resultado.getPopulacaoEstimada());
+
+        verify(especieRepository).findById("1");
+        verify(especieRepository).save(especie);
+    }
+
+    @Test
+    @DisplayName("Deve lançar exceção ao atualizar por id inexistente")
+    public void atualizarPorIdInexistente() {
+        when(especieRepository.findById("100")).thenReturn(Optional.empty());
+
+        assertThrows(EspecieNotFoundException.class, () -> especieService.atualizar("100", especie));
+
+        verify(especieRepository).findById("100");
+        verify(especieRepository, never()).save(especie);
     }
 
 }
