@@ -155,4 +155,28 @@ public class EspecieServiceTest {
         verify(especieRepository, never()).save(especie);
     }
 
+    @Test
+    @DisplayName("Deve deletar uma espécie por id")
+    public void deletarEspecie() {
+        especie.setId("10");
+
+        when(especieRepository.findById("10")).thenReturn(Optional.of(especie));
+
+        especieService.deletar("10");
+
+        verify(especieRepository).findById("10");
+        verify(especieRepository).deleteById("10");
+    }
+
+    @Test
+    @DisplayName("Deve lançar exceção ao deletar uma espécie por id inexistente")
+    public void deletarPorIdInexistente() {
+        when(especieRepository.findById("10")).thenReturn(Optional.empty());
+
+        assertThrows(EspecieNotFoundException.class, () -> especieService.deletar("10"));
+
+        verify(especieRepository).findById("10");
+        verify(especieRepository, never()).deleteById("10");
+    }
+
 }
