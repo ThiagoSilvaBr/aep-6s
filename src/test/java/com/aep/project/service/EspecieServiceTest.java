@@ -1,5 +1,6 @@
 package com.aep.project.service;
 
+import com.aep.project.exception.EspecieNotFoundException;
 import com.aep.project.model.Bioma;
 import com.aep.project.model.Especie;
 import com.aep.project.model.Grupo;
@@ -14,8 +15,10 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -91,6 +94,27 @@ public class EspecieServiceTest {
 
         assertEquals(especies, resultado);
         verify(especieRepository).findAll();
+    }
+
+    @Test
+    @DisplayName("Deve buscar uma espécie por id")
+    public void buscarPorId() {
+        especie.setId("1");
+        when(especieRepository.findById("1")).thenReturn(Optional.of(especie));
+
+        Especie especieBuscada = especieService.buscarPorId("1");
+
+        assertEquals(especie, especieBuscada);
+        verify(especieRepository).findById("1");
+    }
+
+    @Test
+    @DisplayName("Deve lançar exceção ao buscar por id inexistente")
+    public void buscarPorIdInexistente() {
+        when(especieRepository.findById("100")).thenReturn(Optional.empty());
+
+        assertThrows(EspecieNotFoundException.class,() -> especieService.buscarPorId("100"));
+        verify(especieRepository).findById("100");
     }
 
 }
