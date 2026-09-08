@@ -1,0 +1,321 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f6f1;
+    color: #26382b;
+}
+
+header {
+    background-color: #315c42;
+    color: #ffffff;
+    padding: 32px 8%;
+}
+
+header h1 {
+    font-size: 32px;
+    margin-bottom: 8px;
+}
+
+header p {
+    font-size: 16px;
+    color: #dce8dd;
+}
+
+main {
+    width: 84%;
+    max-width: 1200px;
+    margin: 35px auto;
+}
+
+.acoes {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+#campoBusca {
+    flex: 1;
+    padding: 14px 18px;
+    border: 1px solid #cbd6cc;
+    border-radius: 8px;
+    background-color: #ffffff;
+    color: #26382b;
+    font-size: 15px;
+    outline: none;
+}
+
+#campoBusca::placeholder {
+    color: #7a857c;
+}
+
+#campoBusca:focus {
+    border-color: #315c42;
+}
+
+#botaoNovaEspecie {
+    width: 30%;
+    padding: 14px;
+    border: none;
+    border-radius: 8px;
+    background-color: #315c42;
+    color: #ffffff;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+#botaoNovaEspecie:hover {
+    background-color: #264a34;
+}
+
+.filtros {
+    display: flex;
+    gap: 15px;
+    margin: 20px 0 30px;
+}
+
+.filtros select {
+    flex: 1;
+    padding: 12px 14px;
+    border: 1px solid #cbd6cc;
+    border-radius: 8px;
+    background-color: #ffffff;
+    color: #526356;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.filtros select:focus {
+    outline: none;
+    border-color: #315c42;
+}
+
+.lista-especies {
+    width: 100%;
+    background-color: #ffffff;
+    border: 1px solid #e0e6e0;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.lista-especies table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+.lista-especies th {
+    padding: 16px 20px;
+    background-color: #e7efe8;
+    color: #315c42;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.lista-especies td {
+    padding: 17px 20px;
+    border-top: 1px solid #e0e6e0;
+    color: #526356;
+    font-size: 14px;
+    vertical-align: middle;
+}
+
+.lista-especies tbody tr:hover {
+    background-color: #f8faf7;
+}
+
+.lista-especies td:first-child {
+    color: #26382b;
+    font-weight: bold;
+}
+
+.risco {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 20px;
+    background-color: #e7efe8;
+    color: #315c42;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.botao-ver-mais {
+    padding: 8px 15px;
+    border: 1px solid #315c42;
+    border-radius: 7px;
+    background-color: transparent;
+    color: #315c42;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.botao-ver-mais:hover {
+    background-color: #315c42;
+    color: #ffffff;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.45);
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modal-conteudo {
+    position: relative;
+    width: 90%;
+    max-width: 500px;
+    padding: 30px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+
+.modal-conteudo h2 {
+    margin-bottom: 8px;
+    color: #26382b;
+    font-size: 24px;
+}
+
+.modal-conteudo p {
+    color: #68756b;
+    font-size: 14px;
+}
+
+.botao-fechar {
+    position: absolute;
+    top: 15px;
+    right: 18px;
+    border: none;
+    background: transparent;
+    color: #68756b;
+    font-size: 28px;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.botao-fechar:hover {
+    color: #315c42;
+}
+
+.modal-conteudo {
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.modal-conteudo form {
+    margin-top: 25px;
+}
+
+.campo {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 18px;
+}
+
+.campo label {
+    margin-bottom: 7px;
+    color: #26382b;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.campo input,
+.campo select {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid #cbd6cc;
+    border-radius: 7px;
+    background-color: #ffffff;
+    color: #26382b;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    outline: none;
+}
+
+.campo input:focus,
+.campo select:focus {
+    border-color: #315c42;
+}
+
+.campo input::placeholder {
+    color: #7a857c;
+}
+
+.campo select {
+    cursor: pointer;
+}
+
+.botao-cadastrar {
+    width: 100%;
+    padding: 13px;
+    margin-top: 5px;
+    border: none;
+    border-radius: 8px;
+    background-color: #315c42;
+    color: #ffffff;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.botao-cadastrar:hover {
+    background-color: #264a34;
+}
+
+.acoes-modal {
+    display: flex;
+    gap: 12px;
+    margin-top: 25px;
+}
+
+.botao-atualizar,
+.botao-deletar {
+    flex: 1;
+    padding: 13px;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.botao-atualizar {
+    border: none;
+    background-color: #315c42;
+    color: #ffffff;
+}
+
+.botao-atualizar:hover {
+    background-color: #264a34;
+}
+
+.botao-deletar {
+    border: 1px solid #b85c5c;
+    background-color: #ffffff;
+    color: #b85c5c;
+}
+
+.botao-deletar:hover {
+    background-color: #b85c5c;
+    color: #ffffff;
+}
+
+.campo input:read-only,
+.campo select:disabled {
+    background-color: #f4f6f1;
+    color: #526356;
+    cursor: default;
+}
+
+.campo input:not(:read-only),
+.campo select:not(:disabled) {
+    background-color: #ffffff;
+}
