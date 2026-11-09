@@ -25,7 +25,7 @@ public class ObservacaoService {
 
     public Observacao criar(Observacao observacao) {
 
-        if(!observacaoRepository.existsByEspecieId(observacao.getEspecieId())) {
+        if(!especieRepository.existsById(observacao.getEspecieId())) {
             throw new EspecieNotFoundException("Espécie não encontrada com o ID: " + observacao.getEspecieId());
         }
 
