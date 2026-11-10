@@ -1,8 +1,12 @@
 package com.aep.project.model;
 
+import jakarta.validation.constraints.NotBlank;
+
 public class Registro {
 
+    @NotBlank(message = "O tipo deve ser obrigatório")
     private String tipo;
+    @NotBlank(message = "A descrição do registro deve ser obrigatória")
     private String descricao;
 
     public Registro() {}
