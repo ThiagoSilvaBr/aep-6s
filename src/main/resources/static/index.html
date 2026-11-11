@@ -53,6 +53,36 @@
         </table>
     </section>
 
+    <section class="secao-observacoes">
+        <div class="cabecalho-secao">
+            <div>
+                <h2>Observações</h2>
+                <p>Registros de observações das espécies cadastradas.</p>
+            </div>
+
+            <button id="botaoNovaObservacao">
+                + Nova observação
+            </button>
+        </div>
+
+        <div class="lista-observacoes">
+            <table>
+                <thead>
+                <tr>
+                    <th>Espécie</th>
+                    <th>Data</th>
+                    <th>Localização</th>
+                    <th>Quantidade</th>
+                    <th>Ações</th>
+                </tr>
+                </thead>
+
+                <tbody id="tabelaObservacoes">
+                </tbody>
+            </table>
+        </div>
+    </section>
+
 </main>
 
 <div id="modalNovaEspecie" class="modal">
@@ -196,6 +226,127 @@
 
         </div>
 
+    </div>
+</div>
+
+
+<div id="modalNovaObservacao" class="modal">
+    <div class="modal-conteudo">
+
+        <button class="botao-fechar" id="botaoFecharObservacao">&times;</button>
+
+        <h2>Nova observação</h2>
+        <p>Preencha as informações da observação.</p>
+
+        <form id="formNovaObservacao">
+
+            <div class="campo">
+                <label for="observacaoEspecie">Espécie</label>
+                <select id="observacaoEspecie" required>
+                    <option value="" selected disabled>Selecione a espécie</option>
+                </select>
+            </div>
+
+            <h3 class="titulo-campos">Localização</h3>
+
+            <div class="campo">
+                <label for="observacaoMunicipio">Município</label>
+                <input type="text" id="observacaoMunicipio" required>
+            </div>
+
+            <div class="campo">
+                <label for="observacaoEstado">Estado (UF)</label>
+                <input
+                        type="text"
+                        id="observacaoEstado"
+                        maxlength="2"
+                        placeholder="Ex.: PR"
+                        required>
+            </div>
+
+            <h3 class="titulo-campos">Detalhes</h3>
+
+            <div class="campo">
+                <label for="observacaoQuantidade">Quantidade observada</label>
+                <input
+                        type="number"
+                        id="observacaoQuantidade"
+                        min="0"
+                        step="1"
+                        required>
+            </div>
+
+            <div class="campo">
+                <label for="observacaoDescricao">Descrição</label>
+                <textarea
+                        id="observacaoDescricao"
+                        rows="3"
+                        required></textarea>
+            </div>
+
+            <h3 class="titulo-campos">Registros complementares</h3>
+
+            <p class="ajuda-registros">
+                Adicione informações complementares, como comportamento
+                ou características observadas. Essa parte é opcional.
+            </p>
+
+            <div id="listaRegistros"></div>
+
+            <button type="button" id="botaoAdicionarRegistro">
+                + Adicionar registro
+            </button>
+
+            <button type="submit" class="botao-cadastrar">
+                Cadastrar observação
+            </button>
+        </form>
+    </div>
+</div>
+
+
+<div id="modalVerObservacao" class="modal">
+    <div class="modal-conteudo">
+
+        <button class="botao-fechar" id="botaoFecharVerObservacao">
+            &times;
+        </button>
+
+        <h2>Detalhes da observação</h2>
+
+        <div class="detalhes-observacao">
+
+            <div class="campo">
+                <label>Espécie</label>
+                <p id="verObservacaoEspecie"></p>
+            </div>
+
+            <div class="campo">
+                <label>Data da observação</label>
+                <p id="verObservacaoData"></p>
+            </div>
+
+            <div class="campo">
+                <label>Localização</label>
+                <p id="verObservacaoLocalizacao"></p>
+            </div>
+
+            <div class="campo">
+                <label>Quantidade observada</label>
+                <p id="verObservacaoQuantidade"></p>
+            </div>
+
+            <div class="campo">
+                <label>Descrição</label>
+                <p id="verObservacaoDescricao"></p>
+            </div>
+
+            <div class="campo">
+                <label>Registros complementares</label>
+                <ul id="verObservacaoRegistros"></ul>
+            </div>
+
+        </div>
     </div>
 </div>
 

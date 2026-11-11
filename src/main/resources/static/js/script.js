@@ -352,3 +352,389 @@ function formatarRisco(risco) {
 }
 
 carregarEspecies();
+
+const botaoNovaObservacao = document.getElementById("botaoNovaObservacao");
+const modalNovaObservacao = document.getElementById("modalNovaObservacao");
+const botaoFecharObservacao = document.getElementById("botaoFecharObservacao");
+const formNovaObservacao = document.getElementById("formNovaObservacao");
+
+const tabelaObservacoes = document.getElementById("tabelaObservacoes");
+const selectEspecieObservacao = document.getElementById("observacaoEspecie");
+
+const listaRegistros = document.getElementById("listaRegistros");
+const botaoAdicionarRegistro = document.getElementById("botaoAdicionarRegistro");
+
+const modalVerObservacao = document.getElementById("modalVerObservacao");
+const botaoFecharVerObservacao = document.getElementById("botaoFecharVerObservacao");
+
+let especiesDisponiveis = [];
+let observacoesDisponiveis = [];
+let observacaoSelecionada = null;
+
+async function carregarDadosObservacoes() {
+
+    try {
+
+        const [respostaEspecies, respostaObservacoes] = await Promise.all([
+            fetch("/especies"),
+            fetch("/observacoes")
+        ]);
+
+        if (!respostaEspecies.ok || !respostaObservacoes.ok) {
+            throw new Error("Não foi possível carregar os dados.");
+        }
+
+        especiesDisponiveis = await respostaEspecies.json();
+        observacoesDisponiveis = await respostaObservacoes.json();
+
+        carregarOpcoesEspecies();
+        renderizarObservacoes();
+
+    } catch (erro) {
+
+        console.error(erro);
+
+        tabelaObservacoes.innerHTML = `
+            <tr>
+                <td colspan="5">Erro ao carregar as observações.</td>
+            </tr>
+        `;
+    }
+}
+
+function carregarOpcoesEspecies() {
+
+    selectEspecieObservacao.innerHTML = `
+        <option value="" selected disabled>Selecione a espécie</option>
+    `;
+
+    especiesDisponiveis.forEach(function (especie) {
+
+        const opcao = document.createElement("option");
+
+        opcao.value = especie.id;
+        opcao.textContent = especie.nomePopular;
+
+        selectEspecieObservacao.appendChild(opcao);
+
+    });
+}
+
+function renderizarObservacoes() {
+
+    tabelaObservacoes.innerHTML = "";
+
+    if (observacoesDisponiveis.length === 0) {
+
+        tabelaObservacoes.innerHTML = `
+            <tr>
+                <td colspan="5">Nenhuma observação cadastrada.</td>
+            </tr>
+        `;
+
+        return;
+    }
+
+    observacoesDisponiveis.forEach(function (observacao) {
+
+        const especie = especiesDisponiveis.find(
+            item => item.id === observacao.especieId
+        );
+
+        const nomeEspecie = especie
+            ? especie.nomePopular
+            : "Espécie não encontrada";
+
+        const linha = document.createElement("tr");
+
+        const colunaEspecie = document.createElement("td");
+        colunaEspecie.textContent = nomeEspecie;
+
+        const colunaData = document.createElement("td");
+        colunaData.textContent = formatarDataObservacao(
+            observacao.dataObservacao
+        );
+
+        const colunaLocalizacao = document.createElement("td");
+        colunaLocalizacao.textContent =
+            `${observacao.localizacao.municipio} - ${observacao.localizacao.estado}`;
+
+        const colunaQuantidade = document.createElement("td");
+        colunaQuantidade.textContent =
+            observacao.detalhes.quantidadeObservada;
+
+        const colunaAcoes = document.createElement("td");
+
+        const botaoVer = document.createElement("button");
+        botaoVer.textContent = "Ver detalhes";
+        botaoVer.classList.add("botao-ver-mais");
+        botaoVer.dataset.id = observacao.id;
+
+        const botaoExcluir = document.createElement("button");
+        botaoExcluir.textContent = "Deletar";
+        botaoExcluir.classList.add("botao-excluir-observacao");
+        botaoExcluir.dataset.id = observacao.id;
+
+        colunaAcoes.appendChild(botaoVer);
+        colunaAcoes.appendChild(botaoExcluir);
+
+        linha.appendChild(colunaEspecie);
+        linha.appendChild(colunaData);
+        linha.appendChild(colunaLocalizacao);
+        linha.appendChild(colunaQuantidade);
+        linha.appendChild(colunaAcoes);
+
+        tabelaObservacoes.appendChild(linha);
+
+    });
+}
+
+function formatarDataObservacao(data) {
+    if (!data) {
+        return "-";
+    }
+    return new Date(data).toLocaleDateString("pt-BR");
+}
+
+
+botaoNovaObservacao.addEventListener("click", function () {
+
+    formNovaObservacao.reset();
+    listaRegistros.innerHTML = "";
+
+    modalNovaObservacao.style.display = "flex";
+
+});
+
+
+botaoFecharObservacao.addEventListener("click", function () {
+
+    modalNovaObservacao.style.display = "none";
+
+});
+
+
+botaoAdicionarRegistro.addEventListener("click", function () {
+
+    adicionarCampoRegistro();
+
+});
+
+
+function adicionarCampoRegistro() {
+
+    const registro = document.createElement("div");
+
+    registro.classList.add("registro-item");
+
+    registro.innerHTML = `
+        <div class="campo">
+            <label>Tipo</label>
+            <input type="text" class="registro-tipo"
+                   placeholder="Ex.: Comportamento">
+        </div>
+
+        <div class="campo">
+            <label>Descrição</label>
+            <textarea class="registro-descricao"
+                      rows="2"
+                      placeholder="Descreva a informação"></textarea>
+        </div>
+
+        <button type="button" class="botao-remover-registro">
+            Remover registro
+        </button>
+    `;
+
+    listaRegistros.appendChild(registro);
+
+}
+
+
+listaRegistros.addEventListener("click", function (event) {
+
+    if (event.target.classList.contains("botao-remover-registro")) {
+
+        event.target.closest(".registro-item").remove();
+
+    }
+
+});
+
+
+formNovaObservacao.addEventListener("submit", async function (event) {
+
+    event.preventDefault();
+
+    const camposRegistros = [
+        ...listaRegistros.querySelectorAll(".registro-item")
+    ];
+    const registros = [];
+
+    for (const campo of camposRegistros) {
+
+        const tipo = campo.querySelector(".registro-tipo").value.trim();
+        const descricao = campo.querySelector(".registro-descricao").value.trim();
+
+        if ((tipo && !descricao) || (!tipo && descricao)) {
+            alert("Preencha o tipo e a descrição de cada registro complementar.");
+            return;
+        }
+
+        if (tipo && descricao) {
+            registros.push({ tipo, descricao });
+        }
+    }
+
+    const observacao = {
+        especieId: selectEspecieObservacao.value,
+
+        localizacao: {
+            municipio: document.getElementById("observacaoMunicipio").value.trim(),
+            estado: document.getElementById("observacaoEstado").value.trim().toUpperCase()
+        },
+
+        detalhes: {
+            quantidadeObservada: Number(
+                document.getElementById("observacaoQuantidade").value
+            ),
+            descricao: document.getElementById("observacaoDescricao").value.trim()
+        },
+
+        registros: registros
+    };
+
+    try {
+        const resposta = await fetch("/observacoes", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(observacao)
+        });
+
+        if (!resposta.ok) {
+            throw new Error("Não foi possível cadastrar a observação.");
+        }
+
+        alert("Observação cadastrada com sucesso!");
+
+        formNovaObservacao.reset();
+        listaRegistros.innerHTML = "";
+
+        modalNovaObservacao.style.display = "none";
+
+        await carregarDadosObservacoes();
+
+    } catch (erro) {
+        console.error(erro);
+        alert("Erro ao cadastrar a observação.");
+    }
+});
+
+tabelaObservacoes.addEventListener("click", function (event) {
+
+    const botao = event.target;
+
+    if (botao.classList.contains("botao-ver-mais")) {
+        const id = botao.dataset.id;
+        abrirVerObservacao(id);
+    }
+
+    if (botao.classList.contains("botao-excluir-observacao")) {
+        const id = botao.dataset.id;
+        deletarObservacao(id);
+    }
+});
+
+function abrirVerObservacao(id) {
+
+    const observacao = observacoesDisponiveis.find(
+        item => item.id === id
+    );
+
+    if (!observacao) {
+        alert("Observação não encontrada.");
+        return;
+    }
+
+    observacaoSelecionada = observacao;
+
+    const especie = especiesDisponiveis.find(
+        item => item.id === observacao.especieId
+    );
+
+    document.getElementById("verObservacaoEspecie").textContent =
+        especie ? especie.nomePopular : "Espécie não encontrada";
+
+    document.getElementById("verObservacaoData").textContent =
+        formatarDataObservacao(observacao.dataObservacao);
+
+    document.getElementById("verObservacaoLocalizacao").textContent =
+        `${observacao.localizacao.municipio} - ${observacao.localizacao.estado}`;
+
+    document.getElementById("verObservacaoQuantidade").textContent =
+        observacao.detalhes.quantidadeObservada;
+
+    document.getElementById("verObservacaoDescricao").textContent =
+        observacao.detalhes.descricao;
+
+    const lista = document.getElementById("verObservacaoRegistros");
+
+    lista.innerHTML = "";
+
+    if (!observacao.registros || observacao.registros.length === 0) {
+
+        const item = document.createElement("li");
+        item.textContent = "Nenhum registro complementar.";
+
+        lista.appendChild(item);
+
+    } else {
+        observacao.registros.forEach(function (registro) {
+
+            const item = document.createElement("li");
+
+            item.textContent = `${registro.tipo}: ${registro.descricao}`;
+
+            lista.appendChild(item);
+
+        });
+    }
+    modalVerObservacao.style.display = "flex";
+}
+
+botaoFecharVerObservacao.addEventListener("click", function () {
+    modalVerObservacao.style.display = "none";
+    observacaoSelecionada = null;
+});
+
+async function deletarObservacao(id) {
+
+    const confirmou = confirm(
+        "Deseja realmente deletar esta observação?"
+    );
+
+    if (!confirmou) {
+        return;
+    }
+
+    try {
+        const resposta = await fetch(`/observacoes/${id}`, {
+            method: "DELETE"
+        });
+
+        if (!resposta.ok) {
+            throw new Error("Não foi possível deletar a observação.");
+        }
+
+        alert("Observação deletada com sucesso!");
+        await carregarDadosObservacoes();
+
+    } catch (erro) {
+        console.error(erro);
+        alert("Erro ao deletar a observação.");
+    }
+}
+
+carregarDadosObservacoes();
