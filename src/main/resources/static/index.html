@@ -12,58 +12,69 @@
 
 <header>
     <h1>Faunifica 🐦</h1>
-    <p>Cadastro e consulta de espécies silvestres.</p>
+    <p>Uma plataforma para cadastro, consulta e acompanhamento da biodiversidade.</p>
 </header>
 
 <main>
 
-    <section class="acoes">
-        <input type="text" id="campoBusca" placeholder="Buscar espécie por nome popular...">
-        <button id="botaoNovaEspecie">+ Nova espécie</button>
-    </section>
+    <section class="secao-especies">
 
-    <section class="filtros">
-        <select id="filtroGrupo">
-            <option value="" selected disabled>Grupo</option>
-        </select>
+        <div class="titulo-secao">
+            <h2>Espécies</h2>
+            <p>Cadastro e consulta de espécies silvestres.</p>
+        </div>
 
-        <select id="filtroBioma">
-            <option value="" selected disabled>Bioma</option>
-        </select>
+        <section class="acoes">
+            <input type="text" id="campoBusca" placeholder="Buscar espécie por nome popular...">
+            <button id="botaoNovaEspecie">+ Nova espécie</button>
+        </section>
 
-        <select id="filtroRisco">
-            <option value="" selected disabled>Nível de risco</option>
-        </select>
-    </section>
+        <section class="filtros">
+            <select id="filtroGrupo">
+                <option value="" selected disabled>Grupo</option>
+            </select>
 
-    <section class="lista-especies">
-        <table>
-            <thead>
-                <tr>
-                    <th>Nome popular</th>
-                    <th>Bioma</th>
-                    <th>Grupo</th>
-                    <th>Nível de risco</th>
-                    <th>Ações</th>
-                </tr>
-            </thead>
+            <select id="filtroBioma">
+                <option value="" selected disabled>Bioma</option>
+            </select>
 
-            <tbody id="tabelaEspecies">
-            </tbody>
-        </table>
+            <select id="filtroRisco">
+                <option value="" selected disabled>Nível de risco</option>
+            </select>
+        </section>
+
+        <section class="lista-especies">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nome popular</th>
+                        <th>Bioma</th>
+                        <th>Grupo</th>
+                        <th>Nível de risco</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+
+                <tbody id="tabelaEspecies">
+                </tbody>
+            </table>
+        </section>
+
     </section>
 
     <section class="secao-observacoes">
-        <div class="cabecalho-secao">
-            <div>
-                <h2>Observações</h2>
-                <p>Registros de observações das espécies cadastradas.</p>
-            </div>
 
-            <button id="botaoNovaObservacao">
-                + Nova observação
-            </button>
+        <div class="cabecalho-secao">
+            <h2>Observações</h2>
+            <p>Registros de observações das espécies cadastradas.</p>
         </div>
+
+        <section class="acoes acoes-observacoes">
+            <input type="text" id="campoBuscaObservacoes"
+                   placeholder="Buscar observações por nome popular da espécie...">
+
+            <button id="botaoNovaObservacao">+ Nova observação</button>
+        </section>
 
         <div class="lista-observacoes">
             <table>

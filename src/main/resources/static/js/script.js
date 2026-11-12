@@ -360,6 +360,7 @@ const formNovaObservacao = document.getElementById("formNovaObservacao");
 
 const tabelaObservacoes = document.getElementById("tabelaObservacoes");
 const selectEspecieObservacao = document.getElementById("observacaoEspecie");
+const campoBuscaObservacoes = document.getElementById("campoBuscaObservacoes");
 
 const listaRegistros = document.getElementById("listaRegistros");
 const botaoAdicionarRegistro = document.getElementById("botaoAdicionarRegistro");
@@ -424,19 +425,46 @@ function renderizarObservacoes() {
 
     tabelaObservacoes.innerHTML = "";
 
-    if (observacoesDisponiveis.length === 0) {
+    const termoBusca = campoBuscaObservacoes.value
+        .trim()
+        .toLocaleLowerCase("pt-BR")
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "");
+
+    const observacoesFiltradas = observacoesDisponiveis.filter(
+        function (observacao) {
+
+            const especie = especiesDisponiveis.find(
+                item => item.id === observacao.especieId
+            );
+
+            const nomeEspecie = especie
+                ? especie.nomePopular
+                : "Espécie não encontrada";
+
+            const nomeNormalizado = nomeEspecie
+                .toLocaleLowerCase("pt-BR")
+                .normalize("NFD")
+                .replace(/[\u0300-\u036f]/g, "");
+
+            return nomeNormalizado.includes(termoBusca);
+        }
+    );
+
+    if (observacoesFiltradas.length === 0) {
+        const mensagem = observacoesDisponiveis.length === 0
+            ? "Nenhuma observação cadastrada."
+            : "Nenhuma observação encontrada para essa espécie.";
 
         tabelaObservacoes.innerHTML = `
             <tr>
-                <td colspan="5">Nenhuma observação cadastrada.</td>
+                <td colspan="5">${mensagem}</td>
             </tr>
         `;
-
         return;
     }
 
-    observacoesDisponiveis.forEach(function (observacao) {
-
+    observacoesFiltradas.forEach(function (observacao) {
         const especie = especiesDisponiveis.find(
             item => item.id === observacao.especieId
         );
@@ -736,5 +764,9 @@ async function deletarObservacao(id) {
         alert("Erro ao deletar a observação.");
     }
 }
+
+campoBuscaObservacoes.addEventListener("input", function () {
+    renderizarObservacoes();
+});
 
 carregarDadosObservacoes();

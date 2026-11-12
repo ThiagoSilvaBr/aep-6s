@@ -32,13 +32,32 @@ main {
     margin: 35px auto;
 }
 
+.titulo-secao {
+    margin-bottom: 22px;
+}
+
+.titulo-secao h2 {
+    color: #26382b;
+    font-size: 24px;
+    margin-bottom: 7px;
+}
+
+.titulo-secao p {
+    color: #68756b;
+    font-size: 14px;
+}
+
 .acoes {
     display: flex;
     gap: 20px;
     align-items: center;
 }
 
-#campoBusca {
+.acoes-observacoes {
+    margin-bottom: 20px;
+}
+
+#campoBusca, #campoBuscaObservacoes {
     flex: 1;
     padding: 14px 18px;
     border: 1px solid #cbd6cc;
@@ -49,11 +68,11 @@ main {
     outline: none;
 }
 
-#campoBusca::placeholder {
+#campoBusca::placeholder, #campoBuscaObservacoes::placeholder {
     color: #7a857c;
 }
 
-#campoBusca:focus {
+#campoBusca:focus, #campoBuscaObservacoes:focus {
     border-color: #315c42;
 }
 
@@ -327,10 +346,6 @@ main {
 }
 
 .cabecalho-secao {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 20px;
     margin-bottom: 22px;
 }
 
@@ -346,14 +361,16 @@ main {
 }
 
 #botaoNovaObservacao {
-    padding: 13px 18px;
+    width: 30%;
+    padding: 14px;
     border: none;
     border-radius: 8px;
     background-color: #315c42;
     color: #ffffff;
-    font-size: 14px;
+    font-size: 15px;
     font-weight: bold;
     cursor: pointer;
+    flex-shrink: 0;
 }
 
 #botaoNovaObservacao:hover {
@@ -479,14 +496,13 @@ main {
 }
 
 @media (max-width: 700px) {
-
-    .cabecalho-secao {
-        align-items: flex-start;
+    .acoes {
         flex-direction: column;
+        align-items: stretch;
     }
 
+    #botaoNovaEspecie,
     #botaoNovaObservacao {
         width: 100%;
     }
-
 }
