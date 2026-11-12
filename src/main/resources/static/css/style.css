@@ -32,13 +32,32 @@ main {
     margin: 35px auto;
 }
 
+.titulo-secao {
+    margin-bottom: 22px;
+}
+
+.titulo-secao h2 {
+    color: #26382b;
+    font-size: 24px;
+    margin-bottom: 7px;
+}
+
+.titulo-secao p {
+    color: #68756b;
+    font-size: 14px;
+}
+
 .acoes {
     display: flex;
     gap: 20px;
     align-items: center;
 }
 
-#campoBusca {
+.acoes-observacoes {
+    margin-bottom: 20px;
+}
+
+#campoBusca, #campoBuscaObservacoes {
     flex: 1;
     padding: 14px 18px;
     border: 1px solid #cbd6cc;
@@ -49,11 +68,11 @@ main {
     outline: none;
 }
 
-#campoBusca::placeholder {
+#campoBusca::placeholder, #campoBuscaObservacoes::placeholder {
     color: #7a857c;
 }
 
-#campoBusca:focus {
+#campoBusca:focus, #campoBuscaObservacoes:focus {
     border-color: #315c42;
 }
 
@@ -318,4 +337,172 @@ main {
 .campo input:not(:read-only),
 .campo select:not(:disabled) {
     background-color: #ffffff;
+}
+
+/* SEÇÃO DE OBSERVAÇÕES */
+
+.secao-observacoes {
+    margin-top: 55px;
+}
+
+.cabecalho-secao {
+    margin-bottom: 22px;
+}
+
+.cabecalho-secao h2 {
+    color: #26382b;
+    font-size: 24px;
+    margin-bottom: 7px;
+}
+
+.cabecalho-secao p {
+    color: #68756b;
+    font-size: 14px;
+}
+
+#botaoNovaObservacao {
+    width: 30%;
+    padding: 14px;
+    border: none;
+    border-radius: 8px;
+    background-color: #315c42;
+    color: #ffffff;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+#botaoNovaObservacao:hover {
+    background-color: #264a34;
+}
+
+.lista-observacoes {
+    width: 100%;
+    background-color: #ffffff;
+    border: 1px solid #e0e6e0;
+    border-radius: 10px;
+    overflow-x: auto;
+}
+
+.lista-observacoes table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+.lista-observacoes th {
+    padding: 16px 20px;
+    background-color: #e7efe8;
+    color: #315c42;
+    font-size: 14px;
+}
+
+.lista-observacoes td {
+    padding: 17px 20px;
+    border-top: 1px solid #e0e6e0;
+    color: #526356;
+    font-size: 14px;
+}
+
+.botao-excluir-observacao {
+    padding: 8px 12px;
+    margin-left: 8px;
+    border: 1px solid #b85c5c;
+    border-radius: 7px;
+    background-color: #ffffff;
+    color: #b85c5c;
+    cursor: pointer;
+}
+
+.botao-excluir-observacao:hover {
+    background-color: #b85c5c;
+    color: #ffffff;
+}
+
+.titulo-campos {
+    margin: 24px 0 15px;
+    color: #315c42;
+    font-size: 17px;
+}
+
+.ajuda-registros {
+    margin-bottom: 15px;
+    line-height: 1.5;
+}
+
+.campo textarea {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid #cbd6cc;
+    border-radius: 7px;
+    background-color: #ffffff;
+    color: #26382b;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    resize: vertical;
+}
+
+.campo textarea:focus {
+    outline: none;
+    border-color: #315c42;
+}
+
+#botaoAdicionarRegistro {
+    width: 100%;
+    padding: 11px;
+    margin-bottom: 15px;
+    border: 1px solid #315c42;
+    border-radius: 8px;
+    background-color: #ffffff;
+    color: #315c42;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+#botaoAdicionarRegistro:hover {
+    background-color: #e7efe8;
+}
+
+.registro-item {
+    padding: 15px;
+    margin-bottom: 15px;
+    border: 1px solid #e0e6e0;
+    border-radius: 8px;
+}
+
+.botao-remover-registro {
+    padding: 8px 12px;
+    border: 1px solid #b85c5c;
+    border-radius: 7px;
+    background-color: #ffffff;
+    color: #b85c5c;
+    cursor: pointer;
+}
+
+.detalhes-observacao {
+    margin-top: 25px;
+}
+
+.detalhes-observacao .campo p,
+.detalhes-observacao .campo li {
+    color: #526356;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.detalhes-observacao ul {
+    padding-left: 20px;
+}
+
+@media (max-width: 700px) {
+    .acoes {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    #botaoNovaEspecie,
+    #botaoNovaObservacao {
+        width: 100%;
+    }
 }

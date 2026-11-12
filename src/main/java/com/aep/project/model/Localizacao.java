@@ -1,8 +1,11 @@
 package com.aep.project.model;
 
-public class Localizacao {
+import jakarta.validation.constraints.NotBlank;
 
+public class Localizacao {
+    @NotBlank(message = "O município é obrigatório")
     private String municipio;
+    @NotBlank(message = "O estado é obrigatório")
     private String estado;
 
     public Localizacao() {}
