@@ -6,5 +6,5 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import java.util.List;
 
 public interface EspecieRepository extends MongoRepository<Especie, String> {
-    List<Especie> findByNomePopularContainingIgnoreCase(String nomePopular);
+
 }

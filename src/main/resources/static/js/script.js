@@ -6,6 +6,10 @@ const formNovaEspecie = document.getElementById("formNovaEspecie");
 const tabelaEspecies = document.getElementById("tabelaEspecies");
 const campoBusca = document.getElementById("campoBusca");
 
+const filtroGrupo = document.getElementById("filtroGrupo");
+const filtroBioma = document.getElementById("filtroBioma");
+const filtroRisco = document.getElementById("filtroRisco");
+
 const modalVerEspecie = document.getElementById("modalVerEspecie");
 const botaoFecharVerEspecie = document.getElementById("botaoFecharVerEspecie");
 const botaoAtualizar = document.getElementById("botaoAtualizar");
@@ -66,15 +70,33 @@ formNovaEspecie.addEventListener("submit", async function (event) {
 
 });
 
-async function carregarEspecies(nomePopular = "") {
+
+async function carregarEspecies() {
 
     try {
 
-        let url = "/especies";
+        const parametros = new URLSearchParams();
+        const nomePopular = campoBusca.value.trim();
 
-        if (nomePopular.trim() !== "") {
-            url += `?nomePopular=${encodeURIComponent(nomePopular)}`;
+        if (nomePopular !== "") {
+            parametros.append("nomePopular", nomePopular);
         }
+
+        if (filtroGrupo.value !== "") {
+            parametros.append("grupo", filtroGrupo.value);
+        }
+
+        if (filtroBioma.value !== "") {
+            parametros.append("bioma", filtroBioma.value);
+        }
+
+        if (filtroRisco.value !== "") {
+            parametros.append("nivelRisco", filtroRisco.value);
+        }
+
+        const url = parametros.toString()
+            ? `/especies?${parametros.toString()}`
+            : "/especies";
 
         const resposta = await fetch(url);
 
@@ -85,6 +107,26 @@ async function carregarEspecies(nomePopular = "") {
         const especies = await resposta.json();
 
         tabelaEspecies.innerHTML = "";
+
+        if (especies.length === 0) {
+
+            const semFiltros =
+                nomePopular === "" &&
+                filtroGrupo.value === "" &&
+                filtroBioma.value === "" &&
+                filtroRisco.value === "";
+
+            const mensagem = semFiltros
+                ? "Nenhuma espécie cadastrada."
+                : "Nenhuma espécie encontrada.";
+
+            tabelaEspecies.innerHTML = `
+                <tr>
+                    <td colspan="5">${mensagem}</td>
+                </tr>
+            `;
+            return;
+        }
 
         especies.forEach(function (especie) {
 
@@ -111,15 +153,12 @@ async function carregarEspecies(nomePopular = "") {
                     </button>
                 </td>
             `;
-
             tabelaEspecies.appendChild(linha);
-
         });
 
     } catch (erro) {
 
         console.error(erro);
-
         tabelaEspecies.innerHTML = `
             <tr>
                 <td colspan="5">
@@ -127,14 +166,13 @@ async function carregarEspecies(nomePopular = "") {
                 </td>
             </tr>
         `;
-
     }
-
 }
 
-campoBusca.addEventListener("input", function () {
-    carregarEspecies(campoBusca.value);
-});
+campoBusca.addEventListener("input", carregarEspecies);
+filtroGrupo.addEventListener("change", carregarEspecies);
+filtroBioma.addEventListener("change", carregarEspecies);
+filtroRisco.addEventListener("change", carregarEspecies);
 
 tabelaEspecies.addEventListener("click", function (event) {
     if (!event.target.classList.contains("botao-ver-mais")) {
@@ -458,7 +496,7 @@ function renderizarObservacoes() {
 
         tabelaObservacoes.innerHTML = `
             <tr>
-                <td colspan="5">${mensagem}</td>
+                <td colspan="5"><strong>${mensagem}</strong></td>
             </tr>
         `;
         return;
