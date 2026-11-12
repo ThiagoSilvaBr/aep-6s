@@ -19,7 +19,6 @@ import java.util.List;
 public class ObservacaoController {
 
     private ObservacaoService observacaoService;
-    private EspecieService especieService;
 
     public ObservacaoController(ObservacaoService observacaoService) {
         this.observacaoService = observacaoService;

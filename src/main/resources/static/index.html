@@ -12,45 +12,86 @@
 
 <header>
     <h1>Faunifica 🐦</h1>
-    <p>Cadastro e consulta de espécies silvestres.</p>
+    <p>Uma plataforma para cadastro, consulta e acompanhamento da biodiversidade.</p>
 </header>
 
 <main>
 
-    <section class="acoes">
-        <input type="text" id="campoBusca" placeholder="Buscar espécie por nome popular...">
-        <button id="botaoNovaEspecie">+ Nova espécie</button>
+    <section class="secao-especies">
+
+        <div class="titulo-secao">
+            <h2>Espécies</h2>
+            <p>Cadastro e consulta de espécies silvestres.</p>
+        </div>
+
+        <section class="acoes">
+            <input type="text" id="campoBusca" placeholder="Buscar espécie por nome popular...">
+            <button id="botaoNovaEspecie">+ Nova espécie</button>
+        </section>
+
+        <section class="filtros">
+            <select id="filtroGrupo">
+                <option value="" selected disabled>Grupo</option>
+            </select>
+
+            <select id="filtroBioma">
+                <option value="" selected disabled>Bioma</option>
+            </select>
+
+            <select id="filtroRisco">
+                <option value="" selected disabled>Nível de risco</option>
+            </select>
+        </section>
+
+        <section class="lista-especies">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nome popular</th>
+                        <th>Bioma</th>
+                        <th>Grupo</th>
+                        <th>Nível de risco</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+
+                <tbody id="tabelaEspecies">
+                </tbody>
+            </table>
+        </section>
+
     </section>
 
-    <section class="filtros">
-        <select id="filtroGrupo">
-            <option value="" selected disabled>Grupo</option>
-        </select>
+    <section class="secao-observacoes">
 
-        <select id="filtroBioma">
-            <option value="" selected disabled>Bioma</option>
-        </select>
+        <div class="cabecalho-secao">
+            <h2>Observações</h2>
+            <p>Registros de observações das espécies cadastradas.</p>
+        </div>
 
-        <select id="filtroRisco">
-            <option value="" selected disabled>Nível de risco</option>
-        </select>
-    </section>
+        <section class="acoes acoes-observacoes">
+            <input type="text" id="campoBuscaObservacoes"
+                   placeholder="Buscar observações por nome popular da espécie...">
 
-    <section class="lista-especies">
-        <table>
-            <thead>
+            <button id="botaoNovaObservacao">+ Nova observação</button>
+        </section>
+
+        <div class="lista-observacoes">
+            <table>
+                <thead>
                 <tr>
-                    <th>Nome popular</th>
-                    <th>Bioma</th>
-                    <th>Grupo</th>
-                    <th>Nível de risco</th>
+                    <th>Espécie</th>
+                    <th>Data</th>
+                    <th>Localização</th>
+                    <th>Quantidade</th>
                     <th>Ações</th>
                 </tr>
-            </thead>
+                </thead>
 
-            <tbody id="tabelaEspecies">
-            </tbody>
-        </table>
+                <tbody id="tabelaObservacoes">
+                </tbody>
+            </table>
+        </div>
     </section>
 
 </main>
@@ -196,6 +237,127 @@
 
         </div>
 
+    </div>
+</div>
+
+
+<div id="modalNovaObservacao" class="modal">
+    <div class="modal-conteudo">
+
+        <button class="botao-fechar" id="botaoFecharObservacao">&times;</button>
+
+        <h2>Nova observação</h2>
+        <p>Preencha as informações da observação.</p>
+
+        <form id="formNovaObservacao">
+
+            <div class="campo">
+                <label for="observacaoEspecie">Espécie</label>
+                <select id="observacaoEspecie" required>
+                    <option value="" selected disabled>Selecione a espécie</option>
+                </select>
+            </div>
+
+            <h3 class="titulo-campos">Localização</h3>
+
+            <div class="campo">
+                <label for="observacaoMunicipio">Município</label>
+                <input type="text" id="observacaoMunicipio" required>
+            </div>
+
+            <div class="campo">
+                <label for="observacaoEstado">Estado (UF)</label>
+                <input
+                        type="text"
+                        id="observacaoEstado"
+                        maxlength="2"
+                        placeholder="Ex.: PR"
+                        required>
+            </div>
+
+            <h3 class="titulo-campos">Detalhes</h3>
+
+            <div class="campo">
+                <label for="observacaoQuantidade">Quantidade observada</label>
+                <input
+                        type="number"
+                        id="observacaoQuantidade"
+                        min="0"
+                        step="1"
+                        required>
+            </div>
+
+            <div class="campo">
+                <label for="observacaoDescricao">Descrição</label>
+                <textarea
+                        id="observacaoDescricao"
+                        rows="3"
+                        required></textarea>
+            </div>
+
+            <h3 class="titulo-campos">Registros complementares</h3>
+
+            <p class="ajuda-registros">
+                Adicione informações complementares, como comportamento
+                ou características observadas. Essa parte é opcional.
+            </p>
+
+            <div id="listaRegistros"></div>
+
+            <button type="button" id="botaoAdicionarRegistro">
+                + Adicionar registro
+            </button>
+
+            <button type="submit" class="botao-cadastrar">
+                Cadastrar observação
+            </button>
+        </form>
+    </div>
+</div>
+
+
+<div id="modalVerObservacao" class="modal">
+    <div class="modal-conteudo">
+
+        <button class="botao-fechar" id="botaoFecharVerObservacao">
+            &times;
+        </button>
+
+        <h2>Detalhes da observação</h2>
+
+        <div class="detalhes-observacao">
+
+            <div class="campo">
+                <label>Espécie</label>
+                <p id="verObservacaoEspecie"></p>
+            </div>
+
+            <div class="campo">
+                <label>Data da observação</label>
+                <p id="verObservacaoData"></p>
+            </div>
+
+            <div class="campo">
+                <label>Localização</label>
+                <p id="verObservacaoLocalizacao"></p>
+            </div>
+
+            <div class="campo">
+                <label>Quantidade observada</label>
+                <p id="verObservacaoQuantidade"></p>
+            </div>
+
+            <div class="campo">
+                <label>Descrição</label>
+                <p id="verObservacaoDescricao"></p>
+            </div>
+
+            <div class="campo">
+                <label>Registros complementares</label>
+                <ul id="verObservacaoRegistros"></ul>
+            </div>
+
+        </div>
     </div>
 </div>
 
