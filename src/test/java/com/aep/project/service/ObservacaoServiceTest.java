@@ -55,4 +55,15 @@ public class ObservacaoServiceTest {
         observacao.setRegistros(List.of(registro));
     }
 
+    @Test
+    @DisplayName("Deve criar uma observação")
+    public void criarObservacao(){
+        when(observacaoRepository.save(observacao)).thenReturn(observacao);
+
+        Observacao observacaoCriada = observacaoService.criar(observacao);
+
+        assertEquals(observacao, observacaoCriada);
+        verify(observacaoRepository).save(observacao);
+    }
+
 }
