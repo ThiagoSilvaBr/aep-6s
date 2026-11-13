@@ -13,6 +13,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Query;
 
 import java.util.List;
 import java.util.Optional;
@@ -26,6 +28,9 @@ public class EspecieServiceTest {
 
     @Mock
     private EspecieRepository especieRepository;
+
+    @Mock
+    private MongoTemplate mongoTemplate;
 
     @InjectMocks
     private EspecieService especieService;
@@ -56,16 +61,18 @@ public class EspecieServiceTest {
     }
 
     @Test
-    @DisplayName("Deve buscar todas as espécies quando filtro não for aplicado")
+    @DisplayName("Deve buscar todas as espécies quando nenhum filtro for aplicado")
     public void buscarTodasEspecies() {
         List<Especie> especies = List.of(especie);
 
-        when(especieRepository.findAll()).thenReturn(especies);
+        when(mongoTemplate.find(any(Query.class), eq(Especie.class)))
+                .thenReturn(especies);
 
-        List<Especie> resultado = especieService.buscar(null);
+        List<Especie> resultado = especieService
+                .buscar(null, null, null, null);
 
         assertEquals(especies, resultado);
-        verify(especieRepository).findAll();
+        verify(mongoTemplate).find(any(Query.class), eq(Especie.class));
     }
 
     @Test
@@ -73,13 +80,29 @@ public class EspecieServiceTest {
     public void buscarPorNomePopular() {
         List<Especie> especies = List.of(especie);
 
-        when(especieRepository.findByNomePopularContainingIgnoreCase("Ararinha"))
+        when(mongoTemplate.find(any(Query.class), eq(Especie.class)))
                 .thenReturn(especies);
 
-        List<Especie> resultado = especieService.buscar("Ararinha");
+        List<Especie> resultado = especieService
+                .buscar("Ararinha", null, null, null);
 
         assertEquals(especies, resultado);
-        verify(especieRepository).findByNomePopularContainingIgnoreCase("Ararinha");
+        verify(mongoTemplate).find(any(Query.class), eq(Especie.class));
+    }
+
+    @Test
+    @DisplayName("Deve buscar espécies utilizando os três filtros")
+    public void buscarComTodosFiltros() {
+        List<Especie> especies = List.of(especie);
+
+        when(mongoTemplate.find(any(Query.class), eq(Especie.class)))
+                .thenReturn(especies);
+
+        List<Especie> resultado = especieService
+                .buscar(null, Grupo.AVE, Bioma.AMAZONIA, NivelRisco.CRITICO);
+
+        assertEquals(especies, resultado);
+        verify(mongoTemplate).find(any(Query.class), eq(Especie.class));
     }
 
     @Test
@@ -87,12 +110,14 @@ public class EspecieServiceTest {
     public void buscarComNomeVazio() {
         List<Especie> especies = List.of();
 
-        when(especieRepository.findAll()).thenReturn(especies);
+        when(mongoTemplate.find(any(Query.class), eq(Especie.class)))
+                .thenReturn(especies);
 
-        List<Especie> resultado = especieService.buscar("");
+        List<Especie> resultado = especieService
+                .buscar("", null, null, null);
 
         assertEquals(especies, resultado);
-        verify(especieRepository).findAll();
+        verify(mongoTemplate).find(any(Query.class), eq(Especie.class));
     }
 
     @Test

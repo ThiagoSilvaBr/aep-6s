@@ -3,7 +3,10 @@ package com.aep.project.controller;
 import com.aep.project.dto.EspecieRequest;
 import com.aep.project.dto.EspecieResponse;
 import com.aep.project.mapper.EspecieMapper;
+import com.aep.project.model.Bioma;
 import com.aep.project.model.Especie;
+import com.aep.project.model.Grupo;
+import com.aep.project.model.NivelRisco;
 import com.aep.project.service.EspecieService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -42,9 +45,13 @@ public class EspecieController {
 
     @GetMapping
     public ResponseEntity<List<EspecieResponse>> buscar(
-            @RequestParam(required = false) String nomePopular) {
+            @RequestParam(required = false) String nomePopular,
+            @RequestParam(required = false) Grupo grupo,
+            @RequestParam(required = false) Bioma bioma,
+            @RequestParam(required = false) NivelRisco nivelRisco) {
 
-        List<EspecieResponse> especies = especieService.buscar(nomePopular)
+        List<EspecieResponse> especies = especieService
+                .buscar(nomePopular, grupo, bioma, nivelRisco)
                 .stream()
                 .map(EspecieMapper::paraResposta)
                 .toList();

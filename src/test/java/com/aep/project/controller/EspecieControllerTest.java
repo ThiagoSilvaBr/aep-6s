@@ -72,7 +72,8 @@ public class EspecieControllerTest {
     @Test
     @DisplayName("Deve listar todas espécies em /GET")
     public void listarTodasEspecies() throws Exception {
-        when(especieService.buscar(null)).thenReturn(List.of(especie));
+        when(especieService.buscar(null, null, null, null))
+                .thenReturn(List.of(especie));
 
         mockMvc.perform(get("/especies"))
                 .andExpect(status().isOk())
@@ -83,13 +84,32 @@ public class EspecieControllerTest {
     @Test
     @DisplayName("Deve listar espécies por nome popular em /GET")
     public void listarEspeciesPorNomePopular() throws Exception {
-        when(especieService.buscar("Onça-Pintada")).thenReturn(List.of(especie));
+        when(especieService.buscar("Onça-Pintada", null, null, null))
+                .thenReturn(List.of(especie));
 
         mockMvc.perform(get("/especies")
                 .param("nomePopular", "Onça-Pintada"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].id").value("1"));
 
+    }
+
+    @Test
+    @DisplayName("Deve listar espécies utilizando os filtros em /GET")
+    public void listarEspeciesComFiltros() throws Exception {
+        when(especieService
+                .buscar(null, Grupo.AVE, Bioma.AMAZONIA, NivelRisco.CRITICO))
+                .thenReturn(List.of(especie));
+
+        mockMvc.perform(get("/especies")
+                        .param("grupo", "AVE")
+                        .param("bioma", "AMAZONIA")
+                        .param("nivelRisco", "CRITICO"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].id").value("1"))
+                .andExpect(jsonPath("$[0].grupo").value("AVE"))
+                .andExpect(jsonPath("$[0].bioma").value("AMAZONIA"))
+                .andExpect(jsonPath("$[0].nivelRisco").value("CRITICO"));
     }
 
     @Test
