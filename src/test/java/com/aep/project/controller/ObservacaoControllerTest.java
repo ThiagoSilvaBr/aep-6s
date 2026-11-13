@@ -25,9 +25,10 @@ import java.util.List;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
 @WebMvcTest(ObservacaoController.class)
 public class ObservacaoControllerTest {
@@ -96,5 +97,14 @@ public class ObservacaoControllerTest {
         verify(observacaoService).criar(any(Observacao.class));
     }
 
+    @Test
+    @DisplayName("Deve listar todas observações em /GET")
+    public void listarTodasObservacoes() throws Exception{
+        when(observacaoService.buscar()).thenReturn(List.of(observacao));
+
+        mockMvc.perform(get("/observacoes"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].id").value("1"));
+    }
 
 }
