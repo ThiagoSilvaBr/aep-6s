@@ -9,7 +9,6 @@ import com.aep.project.model.Grupo;
 import com.aep.project.model.NivelRisco;
 import com.aep.project.service.EspecieService;
 import jakarta.validation.Valid;
-import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -22,12 +21,9 @@ import java.util.List;
 public class EspecieController {
 
     private EspecieService especieService;
-    private MongoTemplate mongoTemplate;
 
-    public EspecieController(EspecieService especieService,
-                             MongoTemplate mongoTemplate) {
+    public EspecieController(EspecieService especieService) {
         this.especieService = especieService;
-        this.mongoTemplate = mongoTemplate;
     }
 
     @PostMapping
