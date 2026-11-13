@@ -83,4 +83,18 @@ public class ObservacaoServiceTest {
         assertEquals(observacoes, resultado);
         verify(observacaoRepository).findAll();
     }
+
+    @Test
+    @DisplayName("Deve buscar observação por especieId")
+    public void buscarObservacoesPorEspecieId(){
+        List<Observacao> observacoes = List.of(observacao);
+
+        when(especieRepository.existsById("5")).thenReturn(true);
+        when(observacaoRepository.findByEspecieId("5")).thenReturn(observacoes);
+
+        List<Observacao> resultado = observacaoService.buscarPorEspecie("5");
+
+        assertEquals(observacoes, resultado);
+        verify(observacaoRepository).findByEspecieId("5");
+    }
 }
