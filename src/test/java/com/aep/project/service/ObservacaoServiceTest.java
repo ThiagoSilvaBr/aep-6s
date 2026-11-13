@@ -17,6 +17,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -47,7 +48,7 @@ public class ObservacaoServiceTest {
         registro.setTipo("Fotografia");
         registro.setDescricao("Registro fotográfico da ninhada.");
 
-        Observacao observacao = new Observacao();
+        observacao = new Observacao();
         observacao.setId("1");
         observacao.setEspecieId("5");
         observacao.setLocalizacao(localizacao);
@@ -58,12 +59,15 @@ public class ObservacaoServiceTest {
     @Test
     @DisplayName("Deve criar uma observação")
     public void criarObservacao(){
+        when(especieRepository.existsById("5")).thenReturn(true);
         when(observacaoRepository.save(observacao)).thenReturn(observacao);
 
         Observacao observacaoCriada = observacaoService.criar(observacao);
 
         assertEquals(observacao, observacaoCriada);
+        assertNotNull(observacaoCriada.getDataObservacao());
+
+        verify(especieRepository).existsById("5");
         verify(observacaoRepository).save(observacao);
     }
-
 }
