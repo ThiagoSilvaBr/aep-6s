@@ -1,6 +1,7 @@
 package com.aep.project.service;
 
 import com.aep.project.exception.EspecieNotFoundException;
+import com.aep.project.exception.ObservacaoNotFoundException;
 import com.aep.project.model.Detalhes;
 import com.aep.project.model.Localizacao;
 import com.aep.project.model.Observacao;
@@ -16,6 +17,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -112,4 +114,19 @@ public class ObservacaoServiceTest {
         verify(observacaoRepository, never()).findAll();
         verify(observacaoRepository, never()).findByEspecieId("");
     }
+
+    @Test
+    @DisplayName("Deve deletar uma observação por Id")
+    public void deletarObservacoesPorId(){
+        observacao.setId("1");
+
+        when(observacaoRepository.findById("1"))
+                .thenReturn(Optional.of(observacao));
+
+        observacaoService.deletar("1");
+
+        verify(observacaoRepository).findById("1");
+        verify(observacaoRepository).deleteById("1");
+    }
+
 }
