@@ -129,4 +129,14 @@ public class ObservacaoServiceTest {
         verify(observacaoRepository).deleteById("1");
     }
 
+    @Test
+    @DisplayName("Deve lançar uma exceção ao tentar deletar uma observação de uma especieId inexistente")
+    public void deletarObservacaoPorEspecieIdInexistente(){
+        when(observacaoRepository.findById("1")).thenReturn(Optional.empty());
+
+        assertThrows(ObservacaoNotFoundException.class, () -> observacaoService.deletar("1"));
+
+        verify(observacaoRepository).findById("1");
+        verify(observacaoRepository, never()).deleteById("1");
+    }
 }
