@@ -1,5 +1,6 @@
 package com.aep.project.service;
 
+import com.aep.project.exception.EspecieNotFoundException;
 import com.aep.project.model.Detalhes;
 import com.aep.project.model.Localizacao;
 import com.aep.project.model.Observacao;
@@ -16,8 +17,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -96,5 +96,20 @@ public class ObservacaoServiceTest {
 
         assertEquals(observacoes, resultado);
         verify(observacaoRepository).findByEspecieId("5");
+    }
+
+    @Test
+    @DisplayName("Deve lançar uma exception quando especieId não existir")
+    public void buscarObservacoesComEspecieIdVazio(){
+        when(especieRepository.existsById("")).thenReturn(false);
+
+        assertThrows(
+                EspecieNotFoundException.class,
+                () -> observacaoService.buscarPorEspecie("")
+        );
+
+        verify(especieRepository).existsById("");
+        verify(observacaoRepository, never()).findAll();
+        verify(observacaoRepository, never()).findByEspecieId("");
     }
 }
