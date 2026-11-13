@@ -70,4 +70,17 @@ public class ObservacaoServiceTest {
         verify(especieRepository).existsById("5");
         verify(observacaoRepository).save(observacao);
     }
+
+    @Test
+    @DisplayName("Deve buscar todas as observações quando não especificado uma espécie")
+    public void buscarTodasObservacoes(){
+        List<Observacao> observacoes = List.of(observacao);
+
+        when(observacaoRepository.findAll()).thenReturn(observacoes);
+
+        List<Observacao> resultado = observacaoService.buscar();
+
+        assertEquals(observacoes, resultado);
+        verify(observacaoRepository).findAll();
+    }
 }
